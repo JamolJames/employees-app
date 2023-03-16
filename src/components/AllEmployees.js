@@ -3,9 +3,10 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import AddEmployee from "./AddEmployee";
+import { v4 as uuidv4 } from "uuid";
 
 const columns = [
-    { field: "id", headerName: "ID", width: 150 },
+    { field: "empId", headerName: "ID", width: 150 },
     {
         field: "firstName",
         headerName: "First name",
@@ -25,7 +26,7 @@ const columns = [
         editable: true,
     },
     {
-        field: "startDate",
+        field: "fromDate",
         headerName: "Start Date",
         width: 150,
         editable: true,
@@ -37,34 +38,91 @@ const columns = [
         editable: true,
     },
     {
+        field: "position",
+        headerName: "Position",
+        width: 150,
+        editable: true,
+    },
+    {
+        field: "role",
+        headerName: "Role",
+        width: 100,
+        editable: true,
+    },
+    {
         field: "age",
         headerName: "Age",
         type: "number",
-        width: 110,
+        width: 100,
         editable: true,
     },
     {
         field: "gender",
         headerName: "Gender",
         type: "string",
-        width: 90,
+        width: 100,
     },
 ];
 
 const employees = [
-    { id: "AGLA.ST.001", lastName: "Snow", firstName: "Jon", age: 35, gender: "M" },
-    { id: "AGLA.ST.002", lastName: "Lannister", firstName: "Cersei", age: 42, gender: "F" },
-    { id: "AGLA.ST.003", lastName: "Lannister", firstName: "Jaime", age: 45, gender: "M" },
-    { id: "AGLA.ST.004", lastName: "Stark", firstName: "Arya", age: 16, gender: "F" },
-    { id: "AGLA.ST.005", lastName: "Targaryen", firstName: "Daenerys", age: null, gender: "M" },
-    { id: "AGLA.ST.006", lastName: "Melisandre", firstName: null, age: 150, gender: "F" },
-    { id: "AGLA.ST.007", lastName: "Clifford", firstName: "Ferrara", age: 44, gender: "M" },
-    { id: "AGLA.ST.008", lastName: "Frances", firstName: "Rossini", age: 36, gender: "M" },
-    { id: "AGLA.ST.009", lastName: "Roxie", firstName: "Harvey", age: 65, gender: "F" },
+    { id: 1, empId: "AGLA.ST.001", lastName: "Snow", firstName: "Jon", age: 35, gender: "M" },
+    {
+        id: 2,
+        empId: "AGLA.ST.002",
+        lastName: "Lannister",
+        firstName: "Cersei",
+        age: 42,
+        gender: "F",
+    },
+    {
+        id: 3,
+        empId: "AGLA.ST.003",
+        lastName: "Lannister",
+        firstName: "Jaime",
+        age: 45,
+        gender: "M",
+    },
+    { id: 4, empId: "AGLA.ST.004", lastName: "Stark", firstName: "Arya", age: 16, gender: "F" },
+    {
+        id: 5,
+        empId: "AGLA.ST.005",
+        lastName: "Targaryen",
+        firstName: "Daenerys",
+        age: null,
+        gender: "M",
+    },
+    { id: 6, empId: "AGLA.ST.006", lastName: "Melisandre", firstName: null, age: 150, gender: "F" },
+    {
+        id: 7,
+        empId: "AGLA.ST.007",
+        lastName: "Clifford",
+        firstName: "Ferrara",
+        age: 44,
+        gender: "M",
+    },
+    {
+        id: 8,
+        empId: "AGLA.ST.008",
+        lastName: "Frances",
+        firstName: "Rossini",
+        age: 36,
+        gender: "M",
+    },
+    { id: 9, empId: "AGLA.ST.009", lastName: "Roxie", firstName: "Harvey", age: 65, gender: "F" },
 ];
 
 export default function AllEmployees() {
-    const [rows] = useState(employees);
+    const [rows, setRows] = useState(employees);
+    const addInfo = (empId, salary, fromDate, endDate) => {
+        const newEntry = {
+            id: uuidv4(),
+            empId: empId,
+            salary: salary,
+            fromDate: fromDate,
+            endDate: endDate,
+        };
+        setRows([...rows, newEntry]);
+    };
 
     return (
         <Container maxWidth="lg">
@@ -86,7 +144,7 @@ export default function AllEmployees() {
                     disableRowSelectionOnClick
                 />
             </Box>
-            {/* <AddEmployee /> */}
+            <AddEmployee addInfo={addInfo} rows={rows} />
         </Container>
     );
 }
