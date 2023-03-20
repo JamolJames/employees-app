@@ -23,14 +23,9 @@ export default function AddEmployee({ addInfo, rows }) {
     };
 
     useEffect(() => {
-        if (open)
-            setFirstName(
-                rows.filter((employee) => {
-                    return employee.empId === empId;
-                })[0]?.firstName
-            );
-    }, [empId, open, rows]);
-    console.log(firstName);
+        const found = rows.find(employee => employee.empId === empId)
+        if(found) setFirstName(found.firstName)
+    }, [empId, rows]);
 
     return (
         <div>
@@ -61,8 +56,11 @@ export default function AddEmployee({ addInfo, rows }) {
                         fullWidth
                         variant="standard"
                         value={firstName}
+                        onChange={(e) => {
+                            setFirstName(e.target.value);
+                        }}
                     />
-                    {/* <TextField
+                  {/* <TextField
                         autoFocus
                         margin="dense"
                         id="lastName"
