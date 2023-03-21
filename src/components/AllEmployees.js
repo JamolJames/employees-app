@@ -113,14 +113,19 @@ const employees = [
 
 export default function AllEmployees() {
     const [rows, setRows] = useState(employees);
-    const addInfo = (empId, salary, fromDate, endDate) => {
+    const addInfo = (nEntry) => {
         const newEntry = {
             id: uuidv4(),
-            empId: empId,
-            salary: salary,
-            fromDate: fromDate,
-            endDate: endDate,
+            empId: nEntry.empId,
+            firstName: nEntry.firstName,
+            lastName: nEntry.lastName,
+            salary: nEntry.salary,
+            fromDate: nEntry.fromDate,
+            endDate: nEntry.endDate,
+            role: nEntry.role,
+            position: nEntry.position,
         };
+        console.log(newEntry);
         setRows([...rows, newEntry]);
     };
 

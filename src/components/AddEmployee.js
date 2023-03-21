@@ -5,14 +5,18 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
+import SelectRole from "./SelectRole";
 
 export default function AddEmployee({ addInfo, rows }) {
     const [open, setOpen] = useState(false);
     const [empId, setEmpId] = useState("");
     const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [salary, setSalary] = useState("");
     const [fromDate, setFromDate] = useState("");
     const [endDate, setEndDate] = useState("");
+    const [role, setRole] = useState("");
+    const [position, setPosition] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -22,9 +26,16 @@ export default function AddEmployee({ addInfo, rows }) {
         setOpen(false);
     };
 
+    const getRole = (role) => {
+        setRole(role);
+    };
+
     useEffect(() => {
-        const found = rows.find(employee => employee.empId === empId)
-        if(found) setFirstName(found.firstName)
+        const found = rows.find((employee) => employee.empId === empId);
+        if (found) {
+            setFirstName(found.firstName);
+            setLastName(found.lastName);
+        }
     }, [empId, rows]);
 
     return (
@@ -60,7 +71,7 @@ export default function AddEmployee({ addInfo, rows }) {
                             setFirstName(e.target.value);
                         }}
                     />
-                  {/* <TextField
+                    <TextField
                         autoFocus
                         margin="dense"
                         id="lastName"
@@ -68,8 +79,26 @@ export default function AddEmployee({ addInfo, rows }) {
                         type="string"
                         fullWidth
                         variant="standard"
-                        onChange={}
-                    /> */}
+                        value={lastName}
+                        onChange={(e) => {
+                            setLastName(e.target.value);
+                        }}
+                    />
+                    <SelectRole getRole={getRole} />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="position"
+                        label="Position"
+                        type="string"
+                        fullWidth
+                        variant="standard"
+                        value={position}
+                        onChange={(e) => {
+                            setPosition(e.target.value);
+                        }}
+                    />
+
                     <TextField
                         autoFocus
                         margin="dense"
@@ -105,8 +134,18 @@ export default function AddEmployee({ addInfo, rows }) {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={(e) => {
+                            const newEntry = {
+                                empId: empId,
+                                firstName: firstName,
+                                lastName: lastName,
+                                salary: salary,
+                                fromDate: fromDate,
+                                endDate: endDate,
+                                role: role,
+                                position: position,
+                            };
                             e.preventDefault();
-                            addInfo(empId, salary, fromDate, endDate);
+                            addInfo(newEntry);
                             handleClose();
                         }}
                     >
