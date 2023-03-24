@@ -6,6 +6,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import SelectRole from "./SelectRole";
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import { IconButton } from "@mui/material";
 
 export default function AddEmployee({ addInfo, rows }) {
     const [open, setOpen] = useState(false);
@@ -40,9 +42,16 @@ export default function AddEmployee({ addInfo, rows }) {
 
     return (
         <div>
-            <Button variant="contained" sx={{ mt: 1 }} onClick={handleClickOpen}>
-                Add Employee
-            </Button>
+            <IconButton
+                size="small"
+                color="primary"
+                sx={{ mt: "1px", marginLeft: 20 }}
+                onClick={handleClickOpen}
+                justify="space-between"
+            >
+                <AddBoxIcon>Add Employee</AddBoxIcon>
+            </IconButton>
+
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Add Info</DialogTitle>
                 <DialogContent>

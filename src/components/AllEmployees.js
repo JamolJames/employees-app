@@ -1,9 +1,18 @@
 import Box from "@mui/material/Box";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Container from "@mui/material/Container";
 import { useState } from "react";
 import AddEmployee from "./AddEmployee";
 import { v4 as uuidv4 } from "uuid";
+import {
+    GridToolbarQuickFilter,
+    GridToolbarContainer,
+    GridToolbarColumnsButton,
+    GridToolbarFilterButton,
+    GridToolbarExport,
+    GridToolbarDensitySelector,
+} from "@mui/x-data-grid";
+import AlertTrash from "./AlertTrash";
 
 const columns = [
     { field: "empId", headerName: "ID", width: 150 },
@@ -112,7 +121,10 @@ const employees = [
 ];
 
 export default function AllEmployees() {
+    const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [rows, setRows] = useState(employees);
+    // const [del, setDel] = useState(true);
+    // const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const addInfo = (nEntry) => {
         const newEntry = {
             id: uuidv4(),
@@ -129,11 +141,39 @@ export default function AllEmployees() {
         setRows([...rows, newEntry]);
     };
 
+    const deleteEmployees = () => {
+        setRows((prev) => prev.filter((employee) => !rowSelectionModel.includes(employee.id)));
+    };
+
+    function CustomToolbar() {
+        return (
+            <GridToolbarContainer>
+                <GridToolbarColumnsButton />
+                <GridToolbarDensitySelector />
+                <GridToolbarFilterButton />
+                <GridToolbarQuickFilter />
+                <GridToolbarExport />
+                <AddEmployee addInfo={addInfo} rows={rows} />
+                {/* Conditionally display Delete Button */}
+                {rowSelectionModel.length ? <AlertTrash confirmDelete={deleteEmployees} /> : null}
+            </GridToolbarContainer>
+        );
+    }
+
+    function CustomFilterPanel() {
+        return;
+    }
+
     return (
         <Container maxWidth="lg">
             <Box sx={{ height: 600, width: "100%", mt: 5 }}>
                 <DataGrid
-                    slots={{ toolbar: GridToolbar }}
+                    slots={{
+                        toolbar: CustomToolbar,
+                    }}
+                    slotProps={{
+                        filterPanel: CustomFilterPanel,
+                    }}
                     sx={{ boxShadow: 2 }}
                     rows={rows}
                     columns={columns}
@@ -147,9 +187,12 @@ export default function AllEmployees() {
                     pageSizeOptions={[8]}
                     checkboxSelection
                     disableRowSelectionOnClick
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                        setRowSelectionModel(newRowSelectionModel);
+                    }}
+                    rowSelectionModel={rowSelectionModel}
                 />
             </Box>
-            <AddEmployee addInfo={addInfo} rows={rows} />
         </Container>
     );
 }
