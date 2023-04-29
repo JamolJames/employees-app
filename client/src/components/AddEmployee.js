@@ -6,7 +6,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
 import SelectRole from "./SelectRole";
-import AddBoxIcon from "@mui/icons-material/AddBox";
+import AddCircle from "@mui/icons-material/AddCircle";
 import { IconButton } from "@mui/material";
 
 export default function AddEmployee({ addInfo, rows }) {
@@ -45,11 +45,10 @@ export default function AddEmployee({ addInfo, rows }) {
             <IconButton
                 size="small"
                 color="primary"
-                sx={{ mt: "1px", marginLeft: 20 }}
+                // sx={{ mt: "1px", marginLeft: 20 }}
                 onClick={handleClickOpen}
-                justify="space-between"
             >
-                <AddBoxIcon>Add Employee</AddBoxIcon>
+                <AddCircle></AddCircle>
             </IconButton>
 
             <Dialog open={open} onClose={handleClose}>

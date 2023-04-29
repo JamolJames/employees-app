@@ -1,5 +1,8 @@
 .App {
   text-align: center;
+  /* background-color: rgb(158, 165, 171); */
+  height: 100vh;
+  
 }
 
 .App-logo {
@@ -40,3 +43,4 @@
 .Form, p {
     margin-bottom: 0;
 } 
+

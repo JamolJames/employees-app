@@ -1,10 +1,8 @@
-import Box from "@mui/material/Box";
-import { DataGrid } from "@mui/x-data-grid";
-import Container from "@mui/material/Container";
 import { useState } from "react";
-import AddEmployee from "./AddEmployee";
-import { v4 as uuidv4 } from "uuid";
+import { Typography, Box } from "@mui/material";
+import Container from "@mui/material/Container";
 import {
+    DataGrid,
     GridToolbarQuickFilter,
     GridToolbarContainer,
     GridToolbarColumnsButton,
@@ -12,7 +10,10 @@ import {
     GridToolbarExport,
     GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
+import { v4 as uuidv4 } from "uuid";
+import AddEmployee from "./AddEmployee";
 import AlertTrash from "./AlertTrash";
+import logo from "../img/Logo.svg";
 
 const columns = [
     { field: "empId", headerName: "ID", width: 150 },
@@ -20,54 +21,60 @@ const columns = [
         field: "firstName",
         headerName: "First name",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "lastName",
         headerName: "Last name",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "salary",
         headerName: "Salary",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "fromDate",
         headerName: "Start Date",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "endDate",
         headerName: "End Date",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "position",
         headerName: "Position",
         width: 150,
-        editable: true,
+        // editable: true,
     },
     {
         field: "role",
         headerName: "Role",
         width: 100,
-        editable: true,
+        // editable: true,
     },
     {
         field: "age",
         headerName: "Age",
         type: "number",
         width: 100,
-        editable: true,
+        // editable: true,
     },
     {
         field: "gender",
         headerName: "Gender",
+        type: "string",
+        width: 100,
+    },
+    {
+        field: "edit",
+        headerName: "Edit",
         type: "string",
         width: 100,
     },
@@ -166,7 +173,11 @@ export default function AllEmployees() {
 
     return (
         <Container maxWidth="lg">
-            <Box sx={{ height: 600, width: "100%", mt: 5 }}>
+            <Box sx={{ mt: 2 }}>
+                <img src={logo} className="Logo" alt="Coat of Arms Logo" width={100} height={100} />
+            </Box>
+            <Typography fontSize={30}>Short Term Employees</Typography>
+            <Box sx={{ height: 600, width: "100%", mt: 5, background: "#eceff6" }}>
                 <DataGrid
                     slots={{
                         toolbar: CustomToolbar,
