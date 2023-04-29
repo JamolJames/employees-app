@@ -172,7 +172,7 @@ export default function AllEmployees() {
     }
 
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{ position: "relative", zIndex: "1" }}>
             <Box sx={{ mt: 2 }}>
                 <img src={logo} className="Logo" alt="Coat of Arms Logo" width={100} height={100} />
             </Box>

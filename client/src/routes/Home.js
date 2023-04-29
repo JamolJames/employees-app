@@ -5,8 +5,8 @@ import ParticlesBG from "../components/ParticlesBG";
 const Home = () => {
     return (
         <div className="App">
-            <ParticlesBG />
             <AllEmployees />
+            <ParticlesBG />
         </div>
     );
 };
