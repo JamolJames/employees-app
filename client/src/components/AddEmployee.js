@@ -44,7 +44,7 @@ export default function AddEmployee({ addInfo, rows }) {
         <div>
             <IconButton
                 size="small"
-                color="primary"
+                sx={{ color: "#8b0000" }}
                 // sx={{ mt: "1px", marginLeft: 20 }}
                 onClick={handleClickOpen}
             >
@@ -52,7 +52,7 @@ export default function AddEmployee({ addInfo, rows }) {
             </IconButton>
 
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add Info</DialogTitle>
+                <DialogTitle>Add Employee</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoFocus

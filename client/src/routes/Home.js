@@ -1,5 +1,4 @@
 import AllEmployees from "../components/AllEmployees";
-// import "../styles/App.css";
 import ParticlesBG from "../components/ParticlesBG";
 
 const Home = () => {
