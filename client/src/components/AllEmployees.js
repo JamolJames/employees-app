@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Typography, Box } from "@mui/material";
 import Container from "@mui/material/Container";
 import {
@@ -14,122 +14,11 @@ import { v4 as uuidv4 } from "uuid";
 import AddEmployee from "./AddEmployee";
 import AlertTrash from "./AlertTrash";
 import logo from "../img/Logo.svg";
-
-const columns = [
-    { field: "empId", headerName: "ID", width: 150 },
-    {
-        field: "firstName",
-        headerName: "First name",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "lastName",
-        headerName: "Last name",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "salary",
-        headerName: "Salary",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "fromDate",
-        headerName: "Start Date",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "endDate",
-        headerName: "End Date",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "position",
-        headerName: "Position",
-        width: 150,
-        // editable: true,
-    },
-    {
-        field: "role",
-        headerName: "Role",
-        width: 100,
-        // editable: true,
-    },
-    {
-        field: "age",
-        headerName: "Age",
-        type: "number",
-        width: 100,
-        // editable: true,
-    },
-    {
-        field: "gender",
-        headerName: "Gender",
-        type: "string",
-        width: 100,
-    },
-    {
-        field: "edit",
-        headerName: "Edit",
-        type: "string",
-        width: 100,
-    },
-];
-
-const employees = [
-    { id: 1, empId: "AGLA.ST.001", lastName: "Snow", firstName: "Jon", age: 35, gender: "M" },
-    {
-        id: 2,
-        empId: "AGLA.ST.002",
-        lastName: "Lannister",
-        firstName: "Cersei",
-        age: 42,
-        gender: "F",
-    },
-    {
-        id: 3,
-        empId: "AGLA.ST.003",
-        lastName: "Lannister",
-        firstName: "Jaime",
-        age: 45,
-        gender: "M",
-    },
-    { id: 4, empId: "AGLA.ST.004", lastName: "Stark", firstName: "Arya", age: 16, gender: "F" },
-    {
-        id: 5,
-        empId: "AGLA.ST.005",
-        lastName: "Targaryen",
-        firstName: "Daenerys",
-        age: null,
-        gender: "M",
-    },
-    { id: 6, empId: "AGLA.ST.006", lastName: "Melisandre", firstName: null, age: 150, gender: "F" },
-    {
-        id: 7,
-        empId: "AGLA.ST.007",
-        lastName: "Clifford",
-        firstName: "Ferrara",
-        age: 44,
-        gender: "M",
-    },
-    {
-        id: 8,
-        empId: "AGLA.ST.008",
-        lastName: "Frances",
-        firstName: "Rossini",
-        age: 36,
-        gender: "M",
-    },
-    { id: 9, empId: "AGLA.ST.009", lastName: "Roxie", firstName: "Harvey", age: 65, gender: "F" },
-];
+import { columns } from "../DummyData/data";
 
 export default function AllEmployees() {
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
-    const [rows, setRows] = useState(employees);
+    const [rows, setRows] = useState([]);
     // const [del, setDel] = useState(true);
     // const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const addInfo = (nEntry) => {
@@ -148,6 +37,23 @@ export default function AllEmployees() {
         setRows([...rows, newEntry]);
     };
 
+    useEffect(() => {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/employees`)
+            .then((res) => res.json())
+            .then((data) =>
+                setRows(
+                    data.rows.map((employee) => ({
+                        id: employee.id,
+                        empId: employee.emp_id,
+                        lastName: employee.last_name,
+                        firstName: employee.first_name,
+                        age: employee.age,
+                        gender: employee.gender,
+                    }))
+                )
+            );
+    }, []);
+
     const deleteEmployees = () => {
         setRows((prev) => prev.filter((employee) => !rowSelectionModel.includes(employee.id)));
     };
@@ -155,11 +61,11 @@ export default function AllEmployees() {
     function CustomToolbar() {
         return (
             <GridToolbarContainer>
-                <GridToolbarColumnsButton />
-                <GridToolbarDensitySelector />
-                <GridToolbarFilterButton />
-                <GridToolbarQuickFilter />
-                <GridToolbarExport />
+                <GridToolbarColumnsButton sx={{ color: "#8b0000" }} />
+                <GridToolbarDensitySelector sx={{ color: "#8b0000" }} />
+                <GridToolbarFilterButton sx={{ color: "#8b0000" }} />
+                <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
+                <GridToolbarExport sx={{ color: "#8b0000" }} />
                 <AddEmployee addInfo={addInfo} rows={rows} />
                 {/* Conditionally display Delete Button */}
                 {rowSelectionModel.length ? <AlertTrash confirmDelete={deleteEmployees} /> : null}
