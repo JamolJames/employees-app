@@ -1,5 +1,5 @@
 export const columns = [
-    { field: "empId", headerName: "ID", width: 150 },
+    { field: "empId", headerName: "EID", width: 150 },
     {
         field: "firstName",
         headerName: "First name",
@@ -31,7 +31,7 @@ export const columns = [
         // editable: true,
     },
     {
-        field: "position",
+        field: "post",
         headerName: "Position",
         width: 150,
         // editable: true,
@@ -52,6 +52,12 @@ export const columns = [
     {
         field: "gender",
         headerName: "Gender",
+        type: "string",
+        width: 100,
+    },
+    {
+        field: "dept",
+        headerName: "Department",
         type: "string",
         width: 100,
     },

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography, Box } from "@mui/material";
-import Container from "@mui/material/Container";
+import { Typography, Box, Container } from "@mui/material";
 import {
     DataGrid,
     GridToolbarQuickFilter,
@@ -10,7 +9,6 @@ import {
     GridToolbarExport,
     GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
-import { v4 as uuidv4 } from "uuid";
 import AddEmployee from "./AddEmployee";
 import AlertTrash from "./AlertTrash";
 import logo from "../img/Logo.svg";
@@ -21,21 +19,21 @@ export default function AllEmployees() {
     const [rows, setRows] = useState([]);
     // const [del, setDel] = useState(true);
     // const [rowSelectionModel, setRowSelectionModel] = useState([]);
-    const addInfo = (nEntry) => {
-        const newEntry = {
-            id: uuidv4(),
-            empId: nEntry.empId,
-            firstName: nEntry.firstName,
-            lastName: nEntry.lastName,
-            salary: nEntry.salary,
-            fromDate: nEntry.fromDate,
-            endDate: nEntry.endDate,
-            role: nEntry.role,
-            position: nEntry.position,
-        };
-        console.log(newEntry);
-        setRows([...rows, newEntry]);
-    };
+    // const addInfo = (nEntry) => {
+    //     const newEntry = {
+    //         id: "",
+    //         empId: nEntry.empId,
+    //         firstName: nEntry.firstName,
+    //         lastName: nEntry.lastName,
+    //         salary: nEntry.salary,
+    //         fromDate: nEntry.fromDate,
+    //         endDate: nEntry.endDate,
+    //         role: nEntry.role,
+    //         position: nEntry.position,
+    //     };
+    //     console.log(newEntry);
+    //     setRows([...rows, newEntry]);
+    // };
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/employees`)
@@ -49,6 +47,12 @@ export default function AllEmployees() {
                         firstName: employee.first_name,
                         age: employee.age,
                         gender: employee.gender,
+                        salary: employee.salary,
+                        fromDate: employee.from_date,
+                        endDate: employee.to_date,
+                        post: employee.post,
+                        role: employee.role,
+                        dept: employee.dept_name,
                     }))
                 )
             );
@@ -66,7 +70,7 @@ export default function AllEmployees() {
                 <GridToolbarFilterButton sx={{ color: "#8b0000" }} />
                 <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
                 <GridToolbarExport sx={{ color: "#8b0000" }} />
-                <AddEmployee addInfo={addInfo} rows={rows} />
+                <AddEmployee rows={rows} />
                 {/* Conditionally display Delete Button */}
                 {rowSelectionModel.length ? <AlertTrash confirmDelete={deleteEmployees} /> : null}
             </GridToolbarContainer>
@@ -76,7 +80,7 @@ export default function AllEmployees() {
     function CustomFilterPanel() {
         return;
     }
-
+    //Table Display
     return (
         <Container maxWidth="lg" sx={{ position: "relative", zIndex: "1" }}>
             <Box sx={{ mt: 2 }}>

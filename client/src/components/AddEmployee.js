@@ -1,13 +1,16 @@
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import { useState, useEffect } from "react";
-import SelectRole from "./SelectRole";
+import { useState } from "react";
+import {
+    Button,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+} from "@mui/material";
 import AddCircle from "@mui/icons-material/AddCircle";
-import { IconButton } from "@mui/material";
+import GenderMenu from "./GenderMenu";
+import DepartmentMenu from "./DepartmentMenu";
 
 export default function AddEmployee({ addInfo, rows }) {
     const [open, setOpen] = useState(false);
@@ -18,7 +21,11 @@ export default function AddEmployee({ addInfo, rows }) {
     const [fromDate, setFromDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [role, setRole] = useState("");
-    const [position, setPosition] = useState("");
+    const [post, setPost] = useState("");
+    const [dob, setDob] = useState("");
+    const [gender, setGender] = useState("");
+    const [dept, setDept] = useState("");
+    const [id, setId] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -28,26 +35,32 @@ export default function AddEmployee({ addInfo, rows }) {
         setOpen(false);
     };
 
-    const getRole = (role) => {
-        setRole(role);
+    const getGender = (gender) => {
+        setGender(gender);
     };
 
-    useEffect(() => {
-        const found = rows.find((employee) => employee.empId === empId);
-        if (found) {
-            setFirstName(found.firstName);
-            setLastName(found.lastName);
-        }
-    }, [empId, rows]);
+    const getDepartment = (dept) => {
+        setDept(dept);
+    };
+
+    const getId = (id) => {
+        setId(id);
+    };
+
+    // Brings up Problems in console
+    // useEffect(() => {
+    //     const found = rows.find((employee) => employee.empId === empId);
+    //     if (found) {
+    //         setFirstName(found.firstName);
+    //         setLastName(found.lastName);
+    //         setDob(found.dob);
+    //         setGender(found.gender);
+    //     }
+    // }, [empId, rows]);
 
     return (
         <div>
-            <IconButton
-                size="small"
-                sx={{ color: "#8b0000" }}
-                // sx={{ mt: "1px", marginLeft: 20 }}
-                onClick={handleClickOpen}
-            >
+            <IconButton size="small" sx={{ color: "#8b0000" }} onClick={handleClickOpen}>
                 <AddCircle></AddCircle>
             </IconButton>
 
@@ -92,18 +105,48 @@ export default function AddEmployee({ addInfo, rows }) {
                             setLastName(e.target.value);
                         }}
                     />
-                    <SelectRole getRole={getRole} />
+                    <label className="DOB" style={{ color: "grey" }}>
+                        DOB:
+                    </label>
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="position"
+                        id="dob"
+                        type="date"
+                        fullWidth
+                        variant="standard"
+                        value={dob}
+                        onChange={(e) => {
+                            setDob(e.target.value);
+                        }}
+                    />
+                    <GenderMenu getGender={getGender} />
+                    <DepartmentMenu getDepartment={getDepartment} getId={getId} />
+
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="role"
+                        label="Role"
+                        type="string"
+                        fullWidth
+                        variant="standard"
+                        value={role}
+                        onChange={(e) => {
+                            setRole(e.target.value);
+                        }}
+                    />
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="post"
                         label="Position"
                         type="string"
                         fullWidth
                         variant="standard"
-                        value={position}
+                        value={post}
                         onChange={(e) => {
-                            setPosition(e.target.value);
+                            setPost(e.target.value);
                         }}
                     />
 
@@ -115,9 +158,11 @@ export default function AddEmployee({ addInfo, rows }) {
                         type="number"
                         fullWidth
                         variant="standard"
-                        onChange={(e) => setSalary(e.target.value)}
+                        onChange={(e) => setSalary(Number(e.target.value))}
                     />
-                    <label className="Form">From Date:</label>
+                    <label className="Form" style={{ color: "grey" }}>
+                        From Date:
+                    </label>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -127,7 +172,9 @@ export default function AddEmployee({ addInfo, rows }) {
                         variant="standard"
                         onChange={(e) => setFromDate(e.target.value)}
                     />
-                    <label className="Form">End Date:</label>
+                    <label className="Form" style={{ color: "grey" }}>
+                        End Date:
+                    </label>
                     <TextField
                         autoFocus
                         margin="dense"
@@ -142,18 +189,36 @@ export default function AddEmployee({ addInfo, rows }) {
                     <Button onClick={handleClose}>Cancel</Button>
                     <Button
                         onClick={(e) => {
-                            const newEntry = {
-                                empId: empId,
-                                firstName: firstName,
-                                lastName: lastName,
+                            const data = {
+                                emp_id: empId,
+                                first_name: firstName,
+                                last_name: lastName,
                                 salary: salary,
-                                fromDate: fromDate,
-                                endDate: endDate,
+                                from_date: fromDate,
+                                to_date: endDate,
                                 role: role,
-                                position: position,
+                                post: post,
+                                dob: dob,
+                                gender: gender,
+                                dept_no: id,
                             };
                             e.preventDefault();
-                            addInfo(newEntry);
+                            const options = {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(data),
+                            };
+
+                            fetch(`${process.env.REACT_APP_BASE_URL}/api/employees`, options)
+                                .then((response) => response.json())
+                                .then((data) => {
+                                    console.log(data); // do something with the response data
+                                })
+                                .catch((error) => console.error(error));
+
+                            // addInfo(newEntry);
                             handleClose();
                         }}
                     >
