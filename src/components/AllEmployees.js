@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Typography, Box, Container } from "@mui/material";
+import { Typography, Box, Container, IconButton } from "@mui/material";
 import {
     DataGrid,
     GridToolbarQuickFilter,
@@ -9,12 +9,14 @@ import {
     GridToolbarExport,
     GridToolbarDensitySelector,
 } from "@mui/x-data-grid";
-import AddEmployee from "./AddEmployee";
 import AlertTrash from "./AlertTrash";
 import logo from "../img/Logo.svg";
 import { columns } from "../DummyData/data";
+import AddCircle from "@mui/icons-material/AddCircle";
+import { useNavigate } from "react-router-dom";
 
 export default function AllEmployees() {
+    const navigate = useNavigate();
     const [rowSelectionModel, setRowSelectionModel] = useState([]);
     const [rows, setRows] = useState([]);
     // const [del, setDel] = useState(true);
@@ -34,6 +36,16 @@ export default function AllEmployees() {
     //     console.log(newEntry);
     //     setRows([...rows, newEntry]);
     // };
+
+    const AddEmployeeIcon = () => (
+        <IconButton
+            size="small"
+            sx={{ color: "#8b0000" }}
+            onClick={() => navigate("/new-employee")}
+        >
+            <AddCircle />
+        </IconButton>
+    );
 
     useEffect(() => {
         fetch(`${process.env.REACT_APP_BASE_URL}/api/employees`)
@@ -70,7 +82,8 @@ export default function AllEmployees() {
                 <GridToolbarFilterButton sx={{ color: "#8b0000" }} />
                 <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
                 <GridToolbarExport sx={{ color: "#8b0000" }} />
-                <AddEmployee rows={rows} />
+                <AddEmployeeIcon />
+
                 {/* Conditionally display Delete Button */}
                 {rowSelectionModel.length ? <AlertTrash confirmDelete={deleteEmployees} /> : null}
             </GridToolbarContainer>
@@ -110,6 +123,7 @@ export default function AllEmployees() {
                     disableRowSelectionOnClick
                     onRowSelectionModelChange={(newRowSelectionModel) => {
                         setRowSelectionModel(newRowSelectionModel);
+                        console.log(newRowSelectionModel);
                     }}
                     rowSelectionModel={rowSelectionModel}
                 />
