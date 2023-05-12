@@ -1,44 +1,47 @@
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { useState } from "react";
-import { departments as d } from "./departments";
+import { useState, useEffect } from "react"
+import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material"
 
-export default function DepartmentMenu(props) {
-    const [department, setDepartment] = useState("");
-    const departments = d.map((dep) => dep.name);
+export default function DepartmentMenu({ getDepartment, getId }) {
+  const [selected, setSelected] = useState("")
+  const [departments, setDepartments] = useState([])
 
-    const handleChange = (event) => {
-        const department = event.target.value;
-        event.preventDefault();
-        setDepartment(department);
-        props.getDepartment(department);
-        props.getId(departments.indexOf(department) + 1);
-        // console.log(department);
-        // console.log();
-    };
+  useEffect(() => {
+    fetch(
+      fetch(`${process.env.REACT_APP_BASE_URL}/api/departments`)
+        .then((res) => res.json())
+        .then((response) => setDepartments(response.rows))
+    )
+  }, [])
 
-    return (
-        <Box sx={{ Width: 200, mt: 2 }}>
-            <FormControl>
-                <InputLabel>Department</InputLabel>
-                <Select
-                    sx={{ minWidth: 120, mt: 2 }}
-                    value={department}
-                    label="Department"
-                    onChange={handleChange}
-                >
-                    {departments.map((department) => {
-                        return (
-                            <MenuItem key={departments.indexOf(department) + 1} value={department}>
-                                {department}
-                            </MenuItem>
-                        );
-                    })}
-                </Select>
-            </FormControl>
-        </Box>
-    );
+  const handleChange = (event) => {
+    event.preventDefault()
+    const deptNum = event.target.value
+    setSelected(deptNum)
+    getDepartment(
+      departments.find((department) => department.dept_no === deptNum).dept_name
+    )
+    getId(deptNum)
+  }
+
+  return (
+    <Box sx={{ Width: 200, mt: 2 }}>
+      <FormControl>
+        <InputLabel>Department</InputLabel>
+        <Select
+          sx={{ minWidth: 120, mt: 2 }}
+          value={selected}
+          label="Department"
+          onChange={handleChange}
+        >
+          {departments.map(({ dept_name, dept_no }) => {
+            return (
+              <MenuItem key={dept_no} value={dept_no}>
+                {dept_name}
+              </MenuItem>
+            )
+          })}
+        </Select>
+      </FormControl>
+    </Box>
+  )
 }
