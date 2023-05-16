@@ -10,7 +10,7 @@ import {
 import GenderMenu from "./GenderMenu"
 import DepartmentMenu from "./DepartmentMenu"
 
-export default function AddEmployee({ open, handleClose, setIsLoading }) {
+export default function AddEmployee({ handleClose, setIsLoading }) {
   const [empId, setEmpId] = useState("")
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -75,7 +75,7 @@ export default function AddEmployee({ open, handleClose, setIsLoading }) {
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={true} onClose={handleClose}>
       <DialogTitle>Add Employee</DialogTitle>
       <DialogContent>
         <TextField

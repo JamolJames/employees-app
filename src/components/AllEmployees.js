@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Typography, Box, Container, IconButton } from "@mui/material"
+import { Typography, Box, Container, IconButton, Button } from "@mui/material"
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -15,12 +15,14 @@ import { columns } from "../DummyData/data"
 import AddCircle from "@mui/icons-material/AddCircle"
 import { useNavigate } from "react-router-dom"
 import AddEmployee from "./AddEmployee"
+import UpdateBio from "./UpdateBio"
 
 export default function AllEmployees() {
   const navigate = useNavigate()
   const [rowSelectionModel, setRowSelectionModel] = useState([])
   const [rows, setRows] = useState([])
   const [open, setOpen] = useState(false)
+  const [openUpdate, setOpenUpdate] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleClose = () => {
@@ -35,6 +37,16 @@ export default function AllEmployees() {
     >
       <AddCircle />
     </IconButton>
+  )
+
+  const UpdateBioBtn = () => (
+    <Button
+      size="small"
+      sx={{ color: "#8b0000" }}
+      onClick={() => setOpen((prev) => !prev)}
+    >
+      Update Bio
+    </Button>
   )
 
   useEffect(() => {
@@ -80,6 +92,7 @@ export default function AllEmployees() {
         <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
         <GridToolbarExport sx={{ color: "#8b0000" }} />
         <AddEmployeeIcon />
+        <UpdateBioBtn />
 
         {/* Conditionally display Delete Button */}
         {rowSelectionModel.length ? (
@@ -133,11 +146,10 @@ export default function AllEmployees() {
           rowSelectionModel={rowSelectionModel}
         />
       </Box>
-      <AddEmployee
-        open={open}
-        handleClose={handleClose}
-        setIsLoading={setIsLoading}
-      />
+      {open && (
+        <AddEmployee handleClose={handleClose} setIsLoading={setIsLoading} />
+      )}
+      <UpdateBio />
     </Container>
   )
 }
