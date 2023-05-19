@@ -13,27 +13,26 @@ import AlertTrash from "./AlertTrash"
 import logo from "../img/Logo.svg"
 import { columns } from "../DummyData/data"
 import AddCircle from "@mui/icons-material/AddCircle"
-import { useNavigate } from "react-router-dom"
 import AddEmployee from "./AddEmployee"
 import UpdateBio from "./UpdateBio"
 
 export default function AllEmployees() {
-  const navigate = useNavigate()
   const [rowSelectionModel, setRowSelectionModel] = useState([])
   const [rows, setRows] = useState([])
-  const [open, setOpen] = useState(false)
-  const [openUpdate, setOpenUpdate] = useState(false)
+  const [addEmployee, setAddEmployee] = useState(false)
+  const [updateBio, setUpdateBio] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleClose = () => {
-    setOpen(false)
+    setAddEmployee(false)
+    setUpdateBio(false)
   }
 
   const AddEmployeeIcon = () => (
     <IconButton
       size="small"
       sx={{ color: "#8b0000" }}
-      onClick={() => setOpen((prev) => !prev)}
+      onClick={() => setAddEmployee((prev) => !prev)}
     >
       <AddCircle />
     </IconButton>
@@ -43,7 +42,7 @@ export default function AllEmployees() {
     <Button
       size="small"
       sx={{ color: "#8b0000" }}
-      onClick={() => setOpen((prev) => !prev)}
+      onClick={() => setUpdateBio((prev) => !prev)}
     >
       Update Bio
     </Button>
@@ -107,7 +106,7 @@ export default function AllEmployees() {
   }
   //Table Display
   return (
-    <Container maxWidth="lg" sx={{ position: "relative", zIndex: "1" }}>
+    <Container maxWidth="xl" sx={{ position: "relative", zIndex: "1" }}>
       <Box sx={{ mt: 2 }}>
         <img
           src={logo}
@@ -146,10 +145,10 @@ export default function AllEmployees() {
           rowSelectionModel={rowSelectionModel}
         />
       </Box>
-      {open && (
+      {addEmployee && (
         <AddEmployee handleClose={handleClose} setIsLoading={setIsLoading} />
       )}
-      <UpdateBio />
+      {updateBio && <UpdateBio handleClose={handleClose} />}
     </Container>
   )
 }
