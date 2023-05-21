@@ -31,7 +31,7 @@ export default function UpdateBio({ handleClose, empId }) {
       validationSchema: validationSchema,
       onSubmit: () => {
         const { firstName, lastName, ...rest } = values
-        fetch(`${process.env.REACT_APP_BASE_URL}/employees/${empId}`, {
+        fetch(`${process.env.REACT_APP_BASE_URL}/api/employees/${empId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
