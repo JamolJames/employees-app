@@ -22,6 +22,7 @@ export default function AllEmployees() {
   const [addEmployee, setAddEmployee] = useState(false)
   const [updateBio, setUpdateBio] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [empId, setEmpId] = useState(null)
 
   const handleClose = () => {
     setAddEmployee(false)
@@ -36,16 +37,6 @@ export default function AllEmployees() {
     >
       <AddCircle />
     </IconButton>
-  )
-
-  const UpdateBioBtn = () => (
-    <Button
-      size="small"
-      sx={{ color: "#8b0000" }}
-      onClick={() => setUpdateBio((prev) => !prev)}
-    >
-      Update Bio
-    </Button>
   )
 
   useEffect(() => {
@@ -91,7 +82,6 @@ export default function AllEmployees() {
         <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
         <GridToolbarExport sx={{ color: "#8b0000" }} />
         <AddEmployeeIcon />
-        <UpdateBioBtn />
 
         {/* Conditionally display Delete Button */}
         {rowSelectionModel.length ? (
@@ -101,14 +91,12 @@ export default function AllEmployees() {
     )
   }
 
-  function CustomFilterPanel() {
-    return
-  }
   //Table Display
   return (
     <Container maxWidth="xl" sx={{ position: "relative", zIndex: "1" }}>
       <Box sx={{ mt: 2 }}>
-        <img
+        <Box
+          component="img"
           src={logo}
           className="Logo"
           alt="Coat of Arms Logo"
@@ -122,12 +110,9 @@ export default function AllEmployees() {
           slots={{
             toolbar: CustomToolbar,
           }}
-          slotProps={{
-            filterPanel: CustomFilterPanel,
-          }}
           sx={{ boxShadow: 2 }}
           rows={rows}
-          columns={columns}
+          columns={columns({ setUpdateBio, setEmpId })}
           initialState={{
             pagination: {
               paginationModel: {
@@ -138,17 +123,16 @@ export default function AllEmployees() {
           pageSizeOptions={[8]}
           checkboxSelection
           disableRowSelectionOnClick
-          onRowSelectionModelChange={(newRowSelectionModel) => {
+          onRowSelectionModelChange={(newRowSelectionModel) =>
             setRowSelectionModel(newRowSelectionModel)
-            console.log(newRowSelectionModel)
-          }}
+          }
           rowSelectionModel={rowSelectionModel}
         />
       </Box>
       {addEmployee && (
         <AddEmployee handleClose={handleClose} setIsLoading={setIsLoading} />
       )}
-      {updateBio && <UpdateBio handleClose={handleClose} />}
+      {updateBio && <UpdateBio handleClose={handleClose} empId={empId} />}
     </Container>
   )
 }
