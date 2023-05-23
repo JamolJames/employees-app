@@ -1,16 +1,15 @@
 import { useState, useEffect } from "react"
 import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material"
+import { query } from "../util/query"
 
 export default function DepartmentMenu({ getDepartment, getId }) {
   const [selected, setSelected] = useState("")
   const [departments, setDepartments] = useState([])
 
   useEffect(() => {
-    fetch(
-      fetch(`${process.env.REACT_APP_BASE_URL}/api/departments`)
-        .then((res) => res.json())
-        .then((response) => setDepartments(response.rows))
-    )
+    query(`/departments`)
+      .then((res) => res.json())
+      .then((response) => setDepartments(response.rows))
   }, [])
 
   const handleChange = (event) => {

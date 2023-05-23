@@ -4,7 +4,7 @@ import { DeleteForever, Edit } from "@mui/icons-material"
 
 const formatDate = (date) => dayjs(date).format("MMM D, YYYY")
 
-export const columns = ({ setUpdateBio, setEmpId }) => [
+export const columns = ({ handleUpdateBio }) => [
   { field: "empId", headerName: "EID", width: 150 },
   {
     field: "firstName",
@@ -74,11 +74,9 @@ export const columns = ({ setUpdateBio, setEmpId }) => [
       />,
       <GridActionsCellItem
         icon={<Edit />}
-        label="Edit"
-        onClick={() => {
-          setUpdateBio((prev) => !prev)
-          setEmpId(row.empId)
-        }}
+        label="Update Bio"
+        onClick={() => handleUpdateBio(row.empId)}
+        showInMenu
       />,
     ],
   },

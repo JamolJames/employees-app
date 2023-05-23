@@ -9,6 +9,7 @@ import {
 } from "@mui/material"
 import GenderMenu from "./GenderMenu"
 import DepartmentMenu from "./DepartmentMenu"
+import { query } from "../util/query"
 
 export default function AddEmployee({ handleClose, setIsLoading }) {
   const [empId, setEmpId] = useState("")
@@ -61,10 +62,7 @@ export default function AddEmployee({ handleClose, setIsLoading }) {
     }
 
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BASE_URL}/api/employees`,
-        options
-      )
+      const response = await query(`/employees`, options)
 
       handleClose()
     } catch (e) {
