@@ -11,8 +11,9 @@ import * as yup from "yup"
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
+import { query } from "../util/query"
 
-export default function UpdateBio({ handleClose, empId }) {
+export default function UpdateBio({ handleClose, setIsLoading, empId }) {
   const validationSchema = yup.object({
     firstName: yup.string().required("Email is required"),
     lastName: yup.string().required("Password is required"),
@@ -30,16 +31,22 @@ export default function UpdateBio({ handleClose, empId }) {
       },
       validationSchema: validationSchema,
       onSubmit: () => {
-        const { firstName, lastName, ...rest } = values
-        fetch(`${process.env.REACT_APP_BASE_URL}/api/employees/${empId}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            first_name: firstName,
-            last_name: lastName,
-            ...rest,
-          }),
-        })
+        try {
+          setIsLoading(true)
+          const { firstName, lastName, ...rest } = values
+          query(`/employees/${empId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              first_name: firstName,
+              last_name: lastName,
+              ...rest,
+            }),
+          })
+          setIsLoading(false)
+        } catch (e) {
+          console.error(e)
+        }
       },
     })
   return (

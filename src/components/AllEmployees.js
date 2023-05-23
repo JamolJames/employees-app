@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Typography, Box, Container, IconButton, Button } from "@mui/material"
+import { Typography, Box, Container, Button } from "@mui/material"
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -7,14 +7,13 @@ import {
   GridToolbarColumnsButton,
   GridToolbarFilterButton,
   GridToolbarExport,
-  GridToolbarDensitySelector,
 } from "@mui/x-data-grid"
 import AlertTrash from "./AlertTrash"
 import logo from "../img/Logo.svg"
 import { columns } from "../DummyData/data"
-import AddCircle from "@mui/icons-material/AddCircle"
 import AddEmployee from "./AddEmployee"
 import UpdateBio from "./UpdateBio"
+import { query } from "../util/query"
 
 export default function AllEmployees() {
   const [rowSelectionModel, setRowSelectionModel] = useState([])
@@ -30,18 +29,24 @@ export default function AllEmployees() {
   }
 
   const AddEmployeeIcon = () => (
-    <IconButton
+    <Button
       size="small"
       sx={{ color: "#8b0000" }}
       onClick={() => setAddEmployee((prev) => !prev)}
     >
-      <AddCircle />
-    </IconButton>
+      Add Employee
+    </Button>
   )
+
+  const handleUpdateBio = (id) => {
+    setUpdateBio((prev) => !prev)
+    setEmpId(id)
+  }
+  console.log(rows)
 
   useEffect(() => {
     if (!isLoading)
-      fetch(`${process.env.REACT_APP_BASE_URL}/api/employees`)
+      query("/employees")
         .then((res) => res.json())
         .then((data) =>
           setRows(
@@ -77,7 +82,6 @@ export default function AllEmployees() {
     return (
       <GridToolbarContainer>
         <GridToolbarColumnsButton sx={{ color: "#8b0000" }} />
-        <GridToolbarDensitySelector sx={{ color: "#8b0000" }} />
         <GridToolbarFilterButton sx={{ color: "#8b0000" }} />
         <GridToolbarQuickFilter sx={{ color: "#8b0000" }} />
         <GridToolbarExport sx={{ color: "#8b0000" }} />
@@ -112,7 +116,7 @@ export default function AllEmployees() {
           }}
           sx={{ boxShadow: 2 }}
           rows={rows}
-          columns={columns({ setUpdateBio, setEmpId })}
+          columns={columns({ handleUpdateBio })}
           initialState={{
             pagination: {
               paginationModel: {
@@ -132,7 +136,13 @@ export default function AllEmployees() {
       {addEmployee && (
         <AddEmployee handleClose={handleClose} setIsLoading={setIsLoading} />
       )}
-      {updateBio && <UpdateBio handleClose={handleClose} empId={empId} />}
+      {updateBio && (
+        <UpdateBio
+          handleClose={handleClose}
+          setIsLoading={setIsLoading}
+          empId={empId}
+        />
+      )}
     </Container>
   )
 }
