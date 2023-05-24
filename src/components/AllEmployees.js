@@ -13,19 +13,26 @@ import logo from "../img/Logo.svg"
 import { columns } from "../DummyData/data"
 import AddEmployee from "./AddEmployee"
 import UpdateBio from "./UpdateBio"
+import UpdateSalary from "./UpdateSalary"
 import { query } from "../util/query"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+dayjs.extend(relativeTime)
 
 export default function AllEmployees() {
   const [rowSelectionModel, setRowSelectionModel] = useState([])
   const [rows, setRows] = useState([])
   const [addEmployee, setAddEmployee] = useState(false)
   const [updateBio, setUpdateBio] = useState(false)
+  const [updateSalary, setUpdateSalary] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [empId, setEmpId] = useState(null)
+  const [salaryId, setSalaryId] = useState(null) //
 
   const handleClose = () => {
     setAddEmployee(false)
     setUpdateBio(false)
+    setUpdateSalary(false)
   }
 
   const AddEmployeeIcon = () => (
@@ -42,7 +49,10 @@ export default function AllEmployees() {
     setUpdateBio((prev) => !prev)
     setEmpId(id)
   }
-  console.log(rows)
+  const handleUpdateSalary = (id) => {
+    setUpdateSalary((prev) => !prev)
+    setSalaryId(id)
+  }
 
   useEffect(() => {
     if (!isLoading)
@@ -52,13 +62,13 @@ export default function AllEmployees() {
           setRows(
             data.rows.map(
               // prettier-ignore
-              ({id, emp_id, last_name, first_name, age, gender, salary, from_date, to_date, post,role, dept_name,
+              ({id, emp_id, last_name, first_name, dob, gender, salary, from_date, to_date, post,role, dept_name,
             }) => ({
               id,
               empId: emp_id,
               lastName: last_name,
               firstName: first_name,
-              age,
+              age: parseInt(dayjs().from(dayjs(dob),true)),
               gender,
               salary,
               fromDate: from_date,
@@ -116,7 +126,7 @@ export default function AllEmployees() {
           }}
           sx={{ boxShadow: 2 }}
           rows={rows}
-          columns={columns({ handleUpdateBio })}
+          columns={columns({ handleUpdateBio, handleUpdateSalary })}
           initialState={{
             pagination: {
               paginationModel: {
@@ -141,6 +151,13 @@ export default function AllEmployees() {
           handleClose={handleClose}
           setIsLoading={setIsLoading}
           empId={empId}
+        />
+      )}
+      {updateSalary && (
+        <UpdateSalary
+          handleClose={handleClose}
+          setIsLoading={setIsLoading}
+          id={salaryId}
         />
       )}
     </Container>
