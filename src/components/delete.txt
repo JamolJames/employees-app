@@ -1,0 +1,20 @@
+// `
+//         DELETE FROM salary
+//         WHERE emp_id = $1 AND from_date = $2
+//     `,
+// [req.params.emp_id, req.params.from_date]
+//)
+// const idSearch = await db.query(
+//     `
+//             SELECT emp_id FROM salary
+//             WHERE emp_id = $1
+//         `,
+//     [req.params.emp_id]
+// )
+// console.log(idSearch)
+
+// if (idSearch.rows.length === 0) {
+//     await db.query(`DELETE FROM employee WHERE emp_id = $1`, [
+//         req.params.emp_id,
+//     ])
+// }

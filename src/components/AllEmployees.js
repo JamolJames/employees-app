@@ -17,6 +17,7 @@ import UpdateSalary from "./UpdateSalary"
 import { query } from "../util/query"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
+import DeleteEntry from "./DeleteEntry"
 dayjs.extend(relativeTime)
 
 export default function AllEmployees() {
@@ -27,12 +28,29 @@ export default function AllEmployees() {
     const [updateSalary, setUpdateSalary] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [empId, setEmpId] = useState(null)
-    const [salaryId, setSalaryId] = useState(null) //
+    const [salaryId, setSalaryId] = useState(null)
+    const [deleteEntry, setDeleteEntry] = useState(false)
 
     const handleClose = () => {
         setAddEmployee(false)
         setUpdateBio(false)
         setUpdateSalary(false)
+        setDeleteEntry(false)
+    }
+
+    const handleUpdateBio = (id) => {
+        setUpdateBio((prev) => !prev)
+        setEmpId(id)
+    }
+    const handleUpdateSalary = (id) => {
+        setUpdateSalary((prev) => !prev)
+        setSalaryId(id)
+    }
+
+    const handleDeleteEntry = (id) => {
+        setDeleteEntry((prev) => !prev)
+        setSalaryId(id)
+        setIsLoading((prev) => !prev)
     }
 
     const AddEmployeeIcon = () => (
@@ -44,15 +62,6 @@ export default function AllEmployees() {
             Add Employee
         </Button>
     )
-
-    const handleUpdateBio = (id) => {
-        setUpdateBio((prev) => !prev)
-        setEmpId(id)
-    }
-    const handleUpdateSalary = (id) => {
-        setUpdateSalary((prev) => !prev)
-        setSalaryId(id)
-    }
 
     useEffect(() => {
         if (!isLoading)
@@ -70,9 +79,9 @@ export default function AllEmployees() {
                             firstName: first_name,
                             age: parseInt(dayjs().from(dayjs(dob),true)),
                             gender,
-                            salary,
-                            fromDate: from_date,
-                            endDate: to_date,
+                            salary: Number(salary),
+                            fromDate: dayjs(from_date).format('YYYY-MM-DD'),
+                            endDate: dayjs(to_date).format('YYYY-MM-DD'),
                             post,
                             role,
                             dept: dept_name,
@@ -82,10 +91,31 @@ export default function AllEmployees() {
                 )
     }, [isLoading])
 
-    const deleteEmployees = () => {
-        setRows((prev) =>
-            prev.filter((employee) => !rowSelectionModel.includes(employee.id))
-        )
+    const deleteEmployees = async () => {
+        // setRows((prev) =>
+        //     prev.filter((employee) => !rowSelectionModel.includes(employee.id))
+        // )
+        try {
+            const toDelete = rows.filter((employee) =>
+                rowSelectionModel.includes(employee.id)
+            )
+            // Fetch to hit "delete sever route" each time per employee from "toDelete--(Array)"
+            try {
+                setIsLoading(true)
+                toDelete.map(async ({ id }) => {
+                    await query(`employees/salary/${id}`, {
+                        method: "DELETE",
+                    })
+                })
+
+                setIsLoading(false)
+                handleClose()
+            } catch (error) {
+                console.log(error)
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
 
     function CustomToolbar() {
@@ -104,7 +134,7 @@ export default function AllEmployees() {
             </GridToolbarContainer>
         )
     }
-    console.log(rows)
+
     //Table Display
     return (
         <Container maxWidth="xl" sx={{ position: "relative", zIndex: "1" }}>
@@ -133,7 +163,11 @@ export default function AllEmployees() {
                     }}
                     sx={{ boxShadow: 2 }}
                     rows={rows}
-                    columns={columns({ handleUpdateBio, handleUpdateSalary })}
+                    columns={columns({
+                        handleUpdateBio,
+                        handleUpdateSalary,
+                        handleDeleteEntry,
+                    })}
                     initialState={{
                         pagination: {
                             paginationModel: {
@@ -161,6 +195,7 @@ export default function AllEmployees() {
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
                     empId={empId}
+                    isLoading={isLoading}
                 />
             )}
             {updateSalary && (
@@ -170,6 +205,14 @@ export default function AllEmployees() {
                     id={salaryId}
                 />
             )}
+            {deleteEntry && (
+                <DeleteEntry
+                    handleClose={handleClose}
+                    setIsLoading={setIsLoading}
+                    id={salaryId}
+                />
+            )}
+            <Typography>Version 1.0.0</Typography>
         </Container>
     )
 }

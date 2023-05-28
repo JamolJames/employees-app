@@ -36,11 +36,11 @@ export default function UpdateBio({ handleClose, setIsLoading, empId }) {
             dob: null,
         },
         validationSchema,
-        onSubmit: () => {
+        onSubmit: async () => {
             try {
                 setIsLoading(true)
                 const { firstName, lastName, ...rest } = values
-                query(`/employees/${empId}`, {
+                await query(`/employees/${empId}`, {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -50,6 +50,7 @@ export default function UpdateBio({ handleClose, setIsLoading, empId }) {
                     }),
                 })
                 setIsLoading(false)
+                handleClose()
             } catch (e) {
                 console.error(e)
             }
