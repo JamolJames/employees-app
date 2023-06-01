@@ -86,7 +86,7 @@ export const columns = ({
             <GridActionsCellItem
                 icon={<Edit />}
                 label="Update Salary"
-                onClick={() => handleUpdateSalary(row.id)}
+                onClick={() => handleUpdateSalary(row)}
                 showInMenu
             />,
         ],

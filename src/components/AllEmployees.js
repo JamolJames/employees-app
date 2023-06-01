@@ -30,6 +30,7 @@ export default function AllEmployees() {
     const [salaryId, setSalaryId] = useState(null)
     const [deleteEntry, setDeleteEntry] = useState(false)
 
+    // console.log(row
     const handleClose = () => {
         setAddEmployee(false)
         setEmpId(null)
@@ -40,9 +41,9 @@ export default function AllEmployees() {
     const handleUpdateBio = (id) => {
         setEmpId(id)
     }
-    const handleUpdateSalary = (id) => {
+    const handleUpdateSalary = (employee) => {
         setUpdateSalary((prev) => !prev)
-        setSalaryId(id)
+        setSalaryId(employee.id)
     }
 
     const handleDeleteEntry = (id) => {
@@ -67,24 +68,20 @@ export default function AllEmployees() {
                 .then((res) => res.json())
                 .then((data) =>
                     setRows(
-                        data.rows.map(
-                            // prettier-ignore
-                            ({id, emp_id, last_name, first_name, dob, gender, salary, from_date, to_date, post,role, dept_name,
-                            }) => ({
-                            id,
-                            empId: emp_id,
-                            lastName: last_name,
-                            firstName: first_name,
-                            age: parseInt(dayjs().from(dayjs(dob),true)),
-                            gender,
-                            salary: Number(salary),
-                            fromDate: dayjs(from_date).format('YYYY-MM-DD'),
-                            endDate: dayjs(to_date).format('YYYY-MM-DD'),
-                            post,
-                            role,
-                            dept: dept_name,
-                            })
-                        )
+                        data.rows.map((emp) => ({
+                            id: emp.id,
+                            empId: emp.emp_id,
+                            lastName: emp.last_name,
+                            firstName: emp.first_name,
+                            age: parseInt(dayjs().from(dayjs(emp.dob), true)),
+                            gender: emp.gender,
+                            salary: Number(emp.salary),
+                            fromDate: dayjs(emp.from_date).format("YYYY-MM-DD"),
+                            endDate: dayjs(emp.to_date).format("YYYY-MM-DD"),
+                            post: emp.post,
+                            role: emp.role,
+                            dept: emp.dept_name,
+                        }))
                     )
                 )
     }, [isLoading])
