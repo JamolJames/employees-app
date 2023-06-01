@@ -29,8 +29,8 @@ export default function AllEmployees() {
     const [empId, setEmpId] = useState(null)
     const [salaryId, setSalaryId] = useState(null)
     const [deleteEntry, setDeleteEntry] = useState(false)
+    const [prevEmployee, setPrevEmployee] = useState("")
 
-    // console.log(row
     const handleClose = () => {
         setAddEmployee(false)
         setEmpId(null)
@@ -38,10 +38,12 @@ export default function AllEmployees() {
         setDeleteEntry(false)
     }
 
-    const handleUpdateBio = (id) => {
-        setEmpId(id)
+    const handleUpdateBio = (employee) => {
+        setEmpId(employee.id)
+        setPrevEmployee(employee)
     }
     const handleUpdateSalary = (employee) => {
+        setPrevEmployee(employee)
         setUpdateSalary((prev) => !prev)
         setSalaryId(employee.id)
     }
@@ -74,6 +76,7 @@ export default function AllEmployees() {
                             lastName: emp.last_name,
                             firstName: emp.first_name,
                             age: parseInt(dayjs().from(dayjs(emp.dob), true)),
+                            dob: emp.dob,
                             gender: emp.gender,
                             salary: Number(emp.salary),
                             fromDate: dayjs(emp.from_date).format("YYYY-MM-DD"),
@@ -188,6 +191,7 @@ export default function AllEmployees() {
                     setIsLoading={setIsLoading}
                     empId={empId}
                     isLoading={isLoading}
+                    prevEmployee={prevEmployee}
                 />
             )}
             {updateSalary && (
@@ -195,6 +199,7 @@ export default function AllEmployees() {
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
                     id={salaryId}
+                    prevEmployee={prevEmployee}
                 />
             )}
             {deleteEntry && (

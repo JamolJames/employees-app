@@ -13,15 +13,22 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { query } from "../util/query"
 import DepartmentMenu from "./DepartmentMenu"
+import dayjs from "dayjs"
 
-export default function UpdateSalary({ handleClose, setIsLoading, id }) {
+export default function UpdateSalary({
+    handleClose,
+    setIsLoading,
+    id,
+    prevEmployee,
+}) {
+    console.log(prevEmployee)
     const initialValues = {
-        salary: "",
-        fromDate: null,
-        endDate: null,
-        position: "",
+        salary: prevEmployee.salary,
+        fromDate: dayjs(prevEmployee.fromDate).toDate(),
+        endDate: dayjs(prevEmployee.endDate).toDate(),
+        position: prevEmployee.post,
+        role: prevEmployee.role,
         deptId: "",
-        role: "",
     }
     const validationSchema = yup.object({
         salary: yup.string().required("Salary is required"),
@@ -93,9 +100,9 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
 
                         <DatePicker
                             label="From Date"
-                            value={values.fromDate}
+                            value={dayjs(values.fromDate)}
                             onChange={(value) =>
-                                setFieldValue("fromDate", value, true)
+                                setFieldValue("fromDate", value?.toDate(), true)
                             }
                             textField={(params) => (
                                 <TextField
@@ -110,9 +117,9 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
                         />
                         <DatePicker
                             label="End Date"
-                            value={values.endDate}
+                            value={dayjs(values.endDate)}
                             onChange={(value) =>
-                                setFieldValue("endDate", value, true)
+                                setFieldValue("endDate", value?.endDate(), true)
                             }
                             textField={(params) => (
                                 <TextField
