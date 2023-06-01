@@ -16,12 +16,7 @@ import { query } from "../util/query"
 import DepartmentMenu from "./DepartmentMenu"
 
 export default function AddEmployee({ handleClose, setIsLoading }) {
-    const [deptName, setDeptName] = useState("")
     const [deptId, setDeptId] = useState("")
-    const getDeptName = (deptName) => {
-        console.error(deptName)
-        setDeptName(deptName)
-    }
 
     const getDeptId = (deptId) => {
         console.log(deptId)
@@ -221,10 +216,7 @@ export default function AddEmployee({ handleClose, setIsLoading }) {
                             error={touched.role && Boolean(errors.role)}
                             helperText={touched.role && errors.role}
                         />
-                        <DepartmentMenu
-                            getDeptName={getDeptName}
-                            getDeptId={getDeptId}
-                        />
+                        <DepartmentMenu getDeptId={getDeptId} />
 
                         <Button
                             color="primary"

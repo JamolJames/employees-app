@@ -27,7 +27,6 @@ export default function AlertTrash({ confirmDelete }) {
 
     return (
         <Box>
-            {/* {if ()} */}
             <IconButton sx={{ color: "#8b0000" }} onClick={handleClickOpen}>
                 <DeleteForever></DeleteForever>
             </IconButton>

@@ -13,7 +13,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { query } from "../util/query"
 import DepartmentMenu from "./DepartmentMenu"
-import { useState } from "react"
 
 export default function UpdateSalary({ handleClose, setIsLoading, id }) {
     const initialValues = {
@@ -21,6 +20,7 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
         fromDate: null,
         endDate: null,
         position: "",
+        deptId: "",
         role: "",
     }
     const validationSchema = yup.object({
@@ -28,15 +28,12 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
         fromDate: yup.string().required("From Date is required"),
         endDate: yup.string().required("End Date is required"),
         position: yup.string().required("Position is required"),
-        // role: yup.string().required("Role is required"),
-        // dept: yup.string().required("Department is required"),
     })
 
     const onSubmit = async () => {
-        console.log(values)
         try {
             setIsLoading(true)
-            const { salary, fromDate, endDate, position, role } = values
+            const { salary, fromDate, endDate, position, role, deptId } = values
             await query(`employees/salary/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -56,17 +53,8 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
         }
     }
 
-    const [deptName, setDeptName] = useState("")
-    const [deptId, setDeptId] = useState("")
-
-    const getDeptName = (deptName) => {
-        console.error(deptName)
-        setDeptName(deptName)
-    }
-
-    const getDeptId = (deptId) => {
-        console.log(deptId)
-        setDeptId(deptId)
+    const getDeptId = (value) => {
+        setFieldValue("deptId", value, true)
     }
 
     const {
@@ -155,19 +143,8 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
                             error={touched.role && Boolean(errors.role)}
                             helperText={touched.role && errors.role}
                         />
-                        {/* <TextField
-                            fullWidth
-                            name="dept"
-                            label="Department"
-                            value={values.name}
-                            onChange={handleChange}
-                            error={touched.dept && Boolean(errors.dept)}
-                            helperText={touched.dept && errors.dept}
-                        /> */}
-                        <DepartmentMenu
-                            getDeptName={getDeptName}
-                            getDeptId={getDeptId}
-                        />
+
+                        <DepartmentMenu getDeptId={getDeptId} />
                         <Button
                             color="primary"
                             variant="outlined"

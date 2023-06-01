@@ -24,7 +24,6 @@ export default function AllEmployees() {
     const [rowSelectionModel, setRowSelectionModel] = useState([])
     const [rows, setRows] = useState([])
     const [addEmployee, setAddEmployee] = useState(false)
-    const [updateBio, setUpdateBio] = useState(false)
     const [updateSalary, setUpdateSalary] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [empId, setEmpId] = useState(null)
@@ -33,13 +32,12 @@ export default function AllEmployees() {
 
     const handleClose = () => {
         setAddEmployee(false)
-        setUpdateBio(false)
+        setEmpId(null)
         setUpdateSalary(false)
         setDeleteEntry(false)
     }
 
     const handleUpdateBio = (id) => {
-        setUpdateBio((prev) => !prev)
         setEmpId(id)
     }
     const handleUpdateSalary = (id) => {
@@ -92,9 +90,6 @@ export default function AllEmployees() {
     }, [isLoading])
 
     const deleteEmployees = async () => {
-        // setRows((prev) =>
-        //     prev.filter((employee) => !rowSelectionModel.includes(employee.id))
-        // )
         try {
             const toDelete = rows.filter((employee) =>
                 rowSelectionModel.includes(employee.id)
@@ -190,7 +185,7 @@ export default function AllEmployees() {
                     setIsLoading={setIsLoading}
                 />
             )}
-            {updateBio && (
+            {empId && (
                 <UpdateBio
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
@@ -212,7 +207,7 @@ export default function AllEmployees() {
                     id={salaryId}
                 />
             )}
-            <Typography>Version 1.0.0</Typography>
+            <Typography>Version </Typography>
         </Container>
     )
 }

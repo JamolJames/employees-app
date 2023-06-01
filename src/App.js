@@ -1,16 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./routes/Home";
-import NewEmployee from "./routes/NewEmployee";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import Home from "./routes/Home"
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="home" element={<Home />} />
-                <Route path="new-employee" element={<NewEmployee />} />
+                <Route path="" element={<Home />} />
             </Routes>
         </BrowserRouter>
-    );
+    )
 }
 
-export default App;
+export default App
