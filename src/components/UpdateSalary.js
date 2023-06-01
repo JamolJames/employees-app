@@ -19,15 +19,15 @@ export default function UpdateSalary({
     handleClose,
     setIsLoading,
     id,
-    prevEmployee,
+    selectedEmployee,
 }) {
-    console.log(prevEmployee)
+    console.log(selectedEmployee)
     const initialValues = {
-        salary: prevEmployee.salary,
-        fromDate: dayjs(prevEmployee.fromDate).toDate(),
-        endDate: dayjs(prevEmployee.endDate).toDate(),
-        position: prevEmployee.post,
-        role: prevEmployee.role,
+        salary: selectedEmployee.salary,
+        fromDate: selectedEmployee.fromDate,
+        endDate: selectedEmployee.endDate,
+        position: selectedEmployee.post,
+        role: selectedEmployee.role,
         deptId: "",
     }
     const validationSchema = yup.object({
@@ -102,7 +102,7 @@ export default function UpdateSalary({
                             label="From Date"
                             value={dayjs(values.fromDate)}
                             onChange={(value) =>
-                                setFieldValue("fromDate", value?.toDate(), true)
+                                setFieldValue("fromDate", value, true)
                             }
                             textField={(params) => (
                                 <TextField
@@ -119,7 +119,7 @@ export default function UpdateSalary({
                             label="End Date"
                             value={dayjs(values.endDate)}
                             onChange={(value) =>
-                                setFieldValue("endDate", value?.endDate(), true)
+                                setFieldValue("endDate", value, true)
                             }
                             textField={(params) => (
                                 <TextField

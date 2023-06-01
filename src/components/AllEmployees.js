@@ -29,7 +29,7 @@ export default function AllEmployees() {
     const [empId, setEmpId] = useState(null)
     const [salaryId, setSalaryId] = useState(null)
     const [deleteEntry, setDeleteEntry] = useState(false)
-    const [prevEmployee, setPrevEmployee] = useState("")
+    const [selectedEmployee, setSelectedEmployee] = useState("")
 
     const handleClose = () => {
         setAddEmployee(false)
@@ -39,11 +39,11 @@ export default function AllEmployees() {
     }
 
     const handleUpdateBio = (employee) => {
-        setEmpId(employee.id)
-        setPrevEmployee(employee)
+        setEmpId(employee.empId)
+        setSelectedEmployee(employee)
     }
     const handleUpdateSalary = (employee) => {
-        setPrevEmployee(employee)
+        setSelectedEmployee(employee)
         setUpdateSalary((prev) => !prev)
         setSalaryId(employee.id)
     }
@@ -191,7 +191,7 @@ export default function AllEmployees() {
                     setIsLoading={setIsLoading}
                     empId={empId}
                     isLoading={isLoading}
-                    prevEmployee={prevEmployee}
+                    selectedEmployee={selectedEmployee}
                 />
             )}
             {updateSalary && (
@@ -199,7 +199,7 @@ export default function AllEmployees() {
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
                     id={salaryId}
-                    prevEmployee={prevEmployee}
+                    selectedEmployee={selectedEmployee}
                 />
             )}
             {deleteEntry && (

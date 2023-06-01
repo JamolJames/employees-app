@@ -18,9 +18,9 @@ export default function UpdateBio({
     handleClose,
     setIsLoading,
     empId,
-    prevEmployee,
+    selectedEmployee,
 }) {
-    console.log(prevEmployee)
+    console.log(selectedEmployee)
     const validationSchema = yup.object({
         firstName: yup.string().required("First name is required"),
         lastName: yup.string().required("Last name is required"),
@@ -37,10 +37,10 @@ export default function UpdateBio({
         setFieldValue,
     } = useFormik({
         initialValues: {
-            firstName: prevEmployee.firstName,
-            lastName: prevEmployee.lastName,
-            gender: prevEmployee.gender,
-            dob: dayjs(prevEmployee.dob).toDate(),
+            firstName: selectedEmployee.firstName,
+            lastName: selectedEmployee.lastName,
+            gender: selectedEmployee.gender,
+            dob: selectedEmployee.dob,
         },
         validationSchema,
         onSubmit: async () => {
@@ -108,7 +108,7 @@ export default function UpdateBio({
                             label="DOB"
                             value={dayjs(values.dob)}
                             onChange={(value) =>
-                                setFieldValue("dob", value?.toDate(), true)
+                                setFieldValue("dob", value, true)
                             }
                             textField={(params) => (
                                 <TextField
