@@ -1,47 +1,39 @@
 import { useState, useEffect } from "react"
-import { Box, InputLabel, MenuItem, FormControl, Select } from "@mui/material"
+import { InputLabel, MenuItem, FormControl, Select } from "@mui/material"
 import { query } from "../util/query"
 
-export default function DepartmentMenu({ getDeptName, getDeptId }) {
+export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
     const [selected, setSelected] = useState("")
     const [departments, setDepartments] = useState([])
-
     useEffect(() => {
         query(`/departments`)
             .then((res) => res.json())
-            .then((response) => setDepartments(response.rows))
-    }, [])
+            .then((response) => {
+                setDepartments(response.rows)
+                if (selectedEmployee) {
+                    setSelected(selectedEmployee.deptNum)
+                }
+            })
+    }, [selectedEmployee])
 
     const handleChange = (event) => {
-        event.preventDefault()
         const deptNum = event.target.value
         setSelected(deptNum)
-        getDeptName(
-            departments.find((department) => department.dept_no === deptNum)
-                .dept_name
-        )
         getDeptId(deptNum)
     }
 
     return (
-        <Box sx={{ Width: 200, mt: 2 }}>
-            <FormControl>
-                <InputLabel>Department</InputLabel>
-                <Select
-                    sx={{ minWidth: 120, mt: 2 }}
-                    value={selected}
-                    label="Department"
-                    onChange={handleChange}
-                >
-                    {departments.map(({ dept_name, dept_no }) => {
-                        return (
-                            <MenuItem key={dept_no} value={dept_no}>
-                                {dept_name}
-                            </MenuItem>
-                        )
-                    })}
-                </Select>
-            </FormControl>
-        </Box>
+        <FormControl fullWidth>
+            <InputLabel>Department</InputLabel>
+            <Select value={selected} label="Department" onChange={handleChange}>
+                {departments.map(({ dept_name, dept_no }) => {
+                    return (
+                        <MenuItem key={dept_no} value={dept_no}>
+                            {dept_name}
+                        </MenuItem>
+                    )
+                })}
+            </Select>
+        </FormControl>
     )
 }

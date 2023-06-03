@@ -13,30 +13,33 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { query } from "../util/query"
 import DepartmentMenu from "./DepartmentMenu"
-import { useState } from "react"
+import dayjs from "dayjs"
 
-export default function UpdateSalary({ handleClose, setIsLoading, id }) {
+export default function UpdateSalary({
+    handleClose,
+    setIsLoading,
+    id,
+    selectedEmployee,
+}) {
     const initialValues = {
-        salary: "",
-        fromDate: null,
-        endDate: null,
-        position: "",
-        role: "",
+        salary: selectedEmployee.salary,
+        fromDate: selectedEmployee.fromDate,
+        endDate: selectedEmployee.endDate,
+        position: selectedEmployee.post,
+        role: selectedEmployee.role,
+        deptId: selectedEmployee.deptNum,
     }
     const validationSchema = yup.object({
         salary: yup.string().required("Salary is required"),
         fromDate: yup.string().required("From Date is required"),
         endDate: yup.string().required("End Date is required"),
         position: yup.string().required("Position is required"),
-        // role: yup.string().required("Role is required"),
-        // dept: yup.string().required("Department is required"),
     })
 
     const onSubmit = async () => {
-        console.log(values)
         try {
             setIsLoading(true)
-            const { salary, fromDate, endDate, position, role } = values
+            const { salary, fromDate, endDate, position, role, deptId } = values
             await query(`employees/salary/${id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -56,17 +59,8 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
         }
     }
 
-    const [deptName, setDeptName] = useState("")
-    const [deptId, setDeptId] = useState("")
-
-    const getDeptName = (deptName) => {
-        console.error(deptName)
-        setDeptName(deptName)
-    }
-
-    const getDeptId = (deptId) => {
-        console.log(deptId)
-        setDeptId(deptId)
+    const getDeptId = (value) => {
+        setFieldValue("deptId", value, true)
     }
 
     const {
@@ -105,7 +99,7 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
 
                         <DatePicker
                             label="From Date"
-                            value={values.fromDate}
+                            value={dayjs(values.fromDate)}
                             onChange={(value) =>
                                 setFieldValue("fromDate", value, true)
                             }
@@ -122,7 +116,7 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
                         />
                         <DatePicker
                             label="End Date"
-                            value={values.endDate}
+                            value={dayjs(values.endDate)}
                             onChange={(value) =>
                                 setFieldValue("endDate", value, true)
                             }
@@ -155,18 +149,10 @@ export default function UpdateSalary({ handleClose, setIsLoading, id }) {
                             error={touched.role && Boolean(errors.role)}
                             helperText={touched.role && errors.role}
                         />
-                        {/* <TextField
-                            fullWidth
-                            name="dept"
-                            label="Department"
-                            value={values.name}
-                            onChange={handleChange}
-                            error={touched.dept && Boolean(errors.dept)}
-                            helperText={touched.dept && errors.dept}
-                        /> */}
+
                         <DepartmentMenu
-                            getDeptName={getDeptName}
                             getDeptId={getDeptId}
+                            selectedEmployee={selectedEmployee}
                         />
                         <Button
                             color="primary"

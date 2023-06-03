@@ -12,8 +12,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { DatePicker } from "@mui/x-date-pickers/DatePicker"
 import { query } from "../util/query"
+import dayjs from "dayjs"
 
-export default function UpdateBio({ handleClose, setIsLoading, empId }) {
+export default function UpdateBio({
+    handleClose,
+    setIsLoading,
+    empId,
+    selectedEmployee,
+}) {
     const validationSchema = yup.object({
         firstName: yup.string().required("First name is required"),
         lastName: yup.string().required("Last name is required"),
@@ -30,10 +36,10 @@ export default function UpdateBio({ handleClose, setIsLoading, empId }) {
         setFieldValue,
     } = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            gender: "",
-            dob: null,
+            firstName: selectedEmployee.firstName,
+            lastName: selectedEmployee.lastName,
+            gender: selectedEmployee.gender,
+            dob: selectedEmployee.dob,
         },
         validationSchema,
         onSubmit: async () => {
@@ -99,7 +105,7 @@ export default function UpdateBio({ handleClose, setIsLoading, empId }) {
                         />
                         <DatePicker
                             label="DOB"
-                            value={values.dob}
+                            value={dayjs(values.dob)}
                             onChange={(value) =>
                                 setFieldValue("dob", value, true)
                             }

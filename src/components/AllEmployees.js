@@ -24,27 +24,28 @@ export default function AllEmployees() {
     const [rowSelectionModel, setRowSelectionModel] = useState([])
     const [rows, setRows] = useState([])
     const [addEmployee, setAddEmployee] = useState(false)
-    const [updateBio, setUpdateBio] = useState(false)
     const [updateSalary, setUpdateSalary] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [empId, setEmpId] = useState(null)
     const [salaryId, setSalaryId] = useState(null)
     const [deleteEntry, setDeleteEntry] = useState(false)
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
 
     const handleClose = () => {
         setAddEmployee(false)
-        setUpdateBio(false)
+        setEmpId(null)
         setUpdateSalary(false)
         setDeleteEntry(false)
     }
 
-    const handleUpdateBio = (id) => {
-        setUpdateBio((prev) => !prev)
-        setEmpId(id)
+    const handleUpdateBio = (employee) => {
+        setEmpId(employee.empId)
+        setSelectedEmployee(employee)
     }
-    const handleUpdateSalary = (id) => {
+    const handleUpdateSalary = (employee) => {
+        setSelectedEmployee(employee)
         setUpdateSalary((prev) => !prev)
-        setSalaryId(id)
+        setSalaryId(employee.id)
     }
 
     const handleDeleteEntry = (id) => {
@@ -67,34 +68,29 @@ export default function AllEmployees() {
         if (!isLoading)
             query("employees")
                 .then((res) => res.json())
-                .then((data) =>
+                .then((data) => {
                     setRows(
-                        data.rows.map(
-                            // prettier-ignore
-                            ({id, emp_id, last_name, first_name, dob, gender, salary, from_date, to_date, post,role, dept_name,
-                            }) => ({
-                            id,
-                            empId: emp_id,
-                            lastName: last_name,
-                            firstName: first_name,
-                            age: parseInt(dayjs().from(dayjs(dob),true)),
-                            gender,
-                            salary: Number(salary),
-                            fromDate: dayjs(from_date).format('YYYY-MM-DD'),
-                            endDate: dayjs(to_date).format('YYYY-MM-DD'),
-                            post,
-                            role,
-                            dept: dept_name,
-                            })
-                        )
+                        data.rows.map((emp) => ({
+                            id: emp.id,
+                            empId: emp.emp_id,
+                            lastName: emp.last_name,
+                            firstName: emp.first_name,
+                            age: parseInt(dayjs().from(dayjs(emp.dob), true)),
+                            dob: emp.dob,
+                            gender: emp.gender,
+                            salary: Number(emp.salary),
+                            fromDate: dayjs(emp.from_date).format("YYYY-MM-DD"),
+                            endDate: dayjs(emp.to_date).format("YYYY-MM-DD"),
+                            post: emp.post,
+                            role: emp.role,
+                            dept: emp.dept_name,
+                            deptNum: emp.dept_no,
+                        }))
                     )
-                )
+                })
     }, [isLoading])
 
     const deleteEmployees = async () => {
-        // setRows((prev) =>
-        //     prev.filter((employee) => !rowSelectionModel.includes(employee.id))
-        // )
         try {
             const toDelete = rows.filter((employee) =>
                 rowSelectionModel.includes(employee.id)
@@ -190,12 +186,13 @@ export default function AllEmployees() {
                     setIsLoading={setIsLoading}
                 />
             )}
-            {updateBio && (
+            {empId && (
                 <UpdateBio
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
                     empId={empId}
                     isLoading={isLoading}
+                    selectedEmployee={selectedEmployee}
                 />
             )}
             {updateSalary && (
@@ -203,6 +200,7 @@ export default function AllEmployees() {
                     handleClose={handleClose}
                     setIsLoading={setIsLoading}
                     id={salaryId}
+                    selectedEmployee={selectedEmployee}
                 />
             )}
             {deleteEntry && (
@@ -212,7 +210,7 @@ export default function AllEmployees() {
                     id={salaryId}
                 />
             )}
-            <Typography>Version 1.0.0</Typography>
+            <Typography>Version </Typography>
         </Container>
     )
 }
