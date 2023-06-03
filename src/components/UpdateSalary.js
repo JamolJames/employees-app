@@ -44,7 +44,7 @@ export default function UpdateSalary({
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    salary: Number(salary),
+                    salary: salary,
                     from_date: fromDate,
                     to_date: endDate,
                     post: position,

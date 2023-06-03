@@ -84,7 +84,6 @@ export default function AllEmployees() {
                             post: emp.post,
                             role: emp.role,
                             dept: emp.dept_name,
-                            deptNum: emp.dept_no,
                         }))
                     )
                 })
