@@ -21,14 +21,13 @@ export default function UpdateSalary({
     id,
     selectedEmployee,
 }) {
-    console.log(selectedEmployee)
     const initialValues = {
         salary: selectedEmployee.salary,
         fromDate: selectedEmployee.fromDate,
         endDate: selectedEmployee.endDate,
         position: selectedEmployee.post,
         role: selectedEmployee.role,
-        deptId: "",
+        deptId: selectedEmployee.deptNum,
     }
     const validationSchema = yup.object({
         salary: yup.string().required("Salary is required"),
@@ -151,7 +150,10 @@ export default function UpdateSalary({
                             helperText={touched.role && errors.role}
                         />
 
-                        <DepartmentMenu getDeptId={getDeptId} />
+                        <DepartmentMenu
+                            getDeptId={getDeptId}
+                            selectedEmployee={selectedEmployee}
+                        />
                         <Button
                             color="primary"
                             variant="outlined"

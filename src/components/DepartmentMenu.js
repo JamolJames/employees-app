@@ -2,15 +2,19 @@ import { useState, useEffect } from "react"
 import { InputLabel, MenuItem, FormControl, Select } from "@mui/material"
 import { query } from "../util/query"
 
-export default function DepartmentMenu({ getDeptId }) {
+export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
     const [selected, setSelected] = useState("")
     const [departments, setDepartments] = useState([])
-
     useEffect(() => {
         query(`/departments`)
             .then((res) => res.json())
-            .then((response) => setDepartments(response.rows))
-    }, [])
+            .then((response) => {
+                setDepartments(response.rows)
+                if (selectedEmployee) {
+                    setSelected(selectedEmployee.deptNum)
+                }
+            })
+    }, [selectedEmployee])
 
     const handleChange = (event) => {
         const deptNum = event.target.value

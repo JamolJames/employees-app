@@ -29,7 +29,7 @@ export default function AllEmployees() {
     const [empId, setEmpId] = useState(null)
     const [salaryId, setSalaryId] = useState(null)
     const [deleteEntry, setDeleteEntry] = useState(false)
-    const [selectedEmployee, setSelectedEmployee] = useState("")
+    const [selectedEmployee, setSelectedEmployee] = useState(null)
 
     const handleClose = () => {
         setAddEmployee(false)
@@ -68,7 +68,7 @@ export default function AllEmployees() {
         if (!isLoading)
             query("employees")
                 .then((res) => res.json())
-                .then((data) =>
+                .then((data) => {
                     setRows(
                         data.rows.map((emp) => ({
                             id: emp.id,
@@ -84,9 +84,10 @@ export default function AllEmployees() {
                             post: emp.post,
                             role: emp.role,
                             dept: emp.dept_name,
+                            deptNum: emp.dept_no,
                         }))
                     )
-                )
+                })
     }, [isLoading])
 
     const deleteEmployees = async () => {

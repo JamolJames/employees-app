@@ -20,7 +20,6 @@ export default function UpdateBio({
     empId,
     selectedEmployee,
 }) {
-    console.log(selectedEmployee)
     const validationSchema = yup.object({
         firstName: yup.string().required("First name is required"),
         lastName: yup.string().required("Last name is required"),
