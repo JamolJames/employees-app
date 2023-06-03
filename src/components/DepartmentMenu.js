@@ -8,7 +8,15 @@ export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
     useEffect(() => {
         query(`/departments`)
             .then((res) => res.json())
-            .then((response) => setDepartments(response.rows))
+            .then((response) => {
+                const data = response.rows
+                setDepartments(data)
+                setSelected(
+                    data.find(
+                        (dept) => dept.dept_name === selectedEmployee.dept
+                    ).dept_no
+                )
+            })
     }, [selectedEmployee])
 
     const handleChange = (event) => {
@@ -23,7 +31,7 @@ export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
             <Select value={selected} label="Department" onChange={handleChange}>
                 {departments.map(({ dept_name, dept_no }) => {
                     return (
-                        <MenuItem key={dept_no} value={dept_name}>
+                        <MenuItem key={dept_no} value={dept_no}>
                             {dept_name}
                         </MenuItem>
                     )
