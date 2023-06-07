@@ -17,6 +17,7 @@ import DepartmentMenu from "./DepartmentMenu"
 
 export default function AddEmployee({ handleClose, setIsLoading }) {
     const [deptId, setDeptId] = useState("")
+    // const [selectedEmployee, setSelectedEmployee] = useState(null)
 
     const getDeptId = (deptId) => {
         console.log(deptId)

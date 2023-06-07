@@ -31,6 +31,8 @@ export default function AllEmployees() {
     const [deleteEntry, setDeleteEntry] = useState(false)
     const [selectedEmployee, setSelectedEmployee] = useState(null)
 
+    console.log(selectedEmployee)
+
     const handleClose = () => {
         setAddEmployee(false)
         setEmpId(null)
@@ -84,7 +86,6 @@ export default function AllEmployees() {
                             post: emp.post,
                             role: emp.role,
                             dept: emp.dept_name,
-                            deptNum: emp.dept_no,
                         }))
                     )
                 })

@@ -3,18 +3,26 @@ import { InputLabel, MenuItem, FormControl, Select } from "@mui/material"
 import { query } from "../util/query"
 
 export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
-    const [selected, setSelected] = useState("")
+    const [selected, setSelected] = useState(
+        selectedEmployee && selectedEmployee.dept_no
+            ? selectedEmployee.dept_no
+            : ""
+    )
     const [departments, setDepartments] = useState([])
     useEffect(() => {
         query(`/departments`)
             .then((res) => res.json())
             .then((response) => {
-                setDepartments(response.rows)
-                if (selectedEmployee) {
-                    setSelected(selectedEmployee.deptNum)
-                }
+                const data = response.rows
+                setDepartments(data)
+                if (selected)
+                    setSelected(
+                        data.find(
+                            (dept) => dept.dept_name === selectedEmployee.dept
+                        ).dept_no
+                    )
             })
-    }, [selectedEmployee])
+    }, [selectedEmployee, selected])
 
     const handleChange = (event) => {
         const deptNum = event.target.value
@@ -36,4 +44,10 @@ export default function DepartmentMenu({ getDeptId, selectedEmployee }) {
             </Select>
         </FormControl>
     )
+}
+
+DepartmentMenu.defaultProps = {
+    selectedEmployee: {
+        deptNum: "",
+    },
 }
