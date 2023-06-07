@@ -31,6 +31,8 @@ export default function AllEmployees() {
     const [deleteEntry, setDeleteEntry] = useState(false)
     const [selectedEmployee, setSelectedEmployee] = useState(null)
 
+    console.log(selectedEmployee)
+
     const handleClose = () => {
         setAddEmployee(false)
         setEmpId(null)
